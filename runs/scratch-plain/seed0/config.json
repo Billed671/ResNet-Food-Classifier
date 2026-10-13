@@ -1,0 +1,13 @@
+{
+  "pretrained": false,
+  "augment": false,
+  "seed": 0,
+  "data_dir": "data",
+  "runs_dir": "runs",
+  "epochs": 20,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "weight_decay": 0.01,
+  "num_workers": 8,
+  "condition": "scratch-plain"
+}
