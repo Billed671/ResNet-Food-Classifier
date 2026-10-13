@@ -1,0 +1,13 @@
+{
+  "pretrained": true,
+  "augment": false,
+  "seed": 0,
+  "data_dir": "C:\\Users\\vorid\\Desktop\\project\\src\\food_classifier\\data",
+  "runs_dir": "runs",
+  "epochs": 20,
+  "batch_size": 32,
+  "lr": 0.0003,
+  "weight_decay": 0.01,
+  "num_workers": 8,
+  "condition": "pretrained-plain"
+}
