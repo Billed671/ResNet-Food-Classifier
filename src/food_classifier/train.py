@@ -26,7 +26,7 @@ def main():
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--data-dir", type=Path, default=Path("data"))
     parser.add_argument("--runs-dir", type=Path, default=Path("runs"))
-    parser.add_argument("--epochs", type=int, default=30)
+    parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--weight-decay", type=float, default=0.01)
