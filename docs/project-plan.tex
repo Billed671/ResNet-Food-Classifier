@@ -1,0 +1,575 @@
+\documentclass[11pt,a4paper]{article}
+
+% ------------------------------------------------
+% Packages
+% ------------------------------------------------
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage[
+    top=2.2cm,
+    bottom=2.2cm,
+    left=2.4cm,
+    right=2.4cm
+]{geometry}
+
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+% ------------------------------------------------
+% Colors
+% ------------------------------------------------
+
+\definecolor{accent}{HTML}{244A73}
+\definecolor{textgray}{HTML}{555555}
+\definecolor{lightgray}{HTML}{D9DEE5}
+
+% ------------------------------------------------
+% General layout
+% ------------------------------------------------
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+
+\setlist[itemize]{
+    leftmargin=1.6em,
+    itemsep=3pt,
+    topsep=4pt,
+    parsep=0pt
+}
+
+% ------------------------------------------------
+% Section formatting
+% ------------------------------------------------
+
+\titleformat{\section}
+    {\Large\bfseries\color{accent}}
+    {}
+    {0pt}
+    {}
+    [\vspace{3pt}\color{lightgray}\titlerule]
+
+\titleformat{\subsection}
+    {\large\bfseries}
+    {}
+    {0pt}
+    {}
+
+\titlespacing*{\section}
+    {0pt}{22pt}{10pt}
+
+\titlespacing*{\subsection}
+    {0pt}{14pt}{4pt}
+
+% ------------------------------------------------
+% Header and footer
+% ------------------------------------------------
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\small\color{textgray}[P05] Food Image Classification}
+\fancyhead[R]{\small\color{textgray}Project Plan}
+
+\fancyfoot[C]{
+    \small\color{textgray}
+    \thepage\ / \pageref{LastPage}
+}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ------------------------------------------------
+% Document
+% ------------------------------------------------
+
+\begin{document}
+
+% ------------------------------------------------
+% Title page
+% ------------------------------------------------
+
+\begin{titlepage}
+
+\thispagestyle{empty}
+
+\vspace*{2.2cm}
+
+{\color{accent}\rule{\textwidth}{1.5pt}}
+
+\vspace{1.1cm}
+
+{\Large\color{textgray}\textbf{[F26] Introduction to Computer Vision}}
+
+\vspace{0.8cm}
+
+{\Huge\textbf{Food Image Classification}}
+
+\vspace{0.45cm}
+
+{\LARGE\color{accent}\textbf{Project Plan}}
+
+\vspace{1cm}
+
+{\color{lightgray}\rule{\textwidth}{0.8pt}}
+
+\vspace{1.4cm}
+
+{\large
+The project studies food image classification on a selected subset of Food-101.
+The main experiments evaluate the effect of ImageNet pretraining and data augmentation
+on classification quality and on errors between visually similar food classes.
+}
+
+\vfill
+
+{\large\textbf{Dataset}}\\
+Food-101
+
+\vspace{0.5cm}
+
+{\large\textbf{Main model}}\\
+ResNet-18
+
+\vspace{0.5cm}
+
+{\large\textbf{Main experimental factors}}\\
+ImageNet pretraining and data augmentation
+
+\vfill
+
+{\color{textgray}October 2026}
+
+\end{titlepage}
+
+\setcounter{page}{1}
+
+% ------------------------------------------------
+% Project Scope
+% ------------------------------------------------
+
+\section{Project Scope}
+
+\subsection{Objective}
+
+The goal of the project is to build and evaluate an image classifier for food recognition.
+The project will use a subset of 12 classes from the Food-101 dataset:
+
+\begin{itemize}
+    \item carrot cake
+    \item cheesecake
+    \item chocolate cake
+    \item red velvet cake
+    \item ramen
+    \item pho
+    \item spaghetti bolognese
+    \item spaghetti carbonara
+    \item fried rice
+    \item risotto
+    \item hamburger
+    \item pizza
+\end{itemize}
+
+\subsection{Class Selection}
+
+Several visually similar classes are included on purpose. The selected subset contains
+multiple cakes, noodle dishes, pasta dishes, and rice dishes.
+
+This makes it possible to measure not only overall classification quality, but also
+whether the model systematically confuses classes with similar appearance, ingredients,
+texture, or presentation.
+
+Pizza and hamburger are included as more visually distinctive classes. They provide
+a useful comparison with the more difficult groups and help show whether the errors
+are concentrated mainly among similar classes.
+
+\subsection{Model and Experimental Factors}
+
+The main model will be \textbf{ResNet-18}.
+
+The project will study two factors:
+
+\begin{itemize}
+    \item ImageNet pretraining
+    \item data augmentation
+\end{itemize}
+
+The same model architecture will be used in all main experiments. This keeps the
+architecture constant and makes it possible to measure the effect of pretraining
+and augmentation directly.
+
+\subsection{Research Question}
+
+\textbf{How do ImageNet pretraining and data augmentation affect classification
+performance on a subset of Food-101 that contains visually similar food classes?}
+
+% ------------------------------------------------
+% Dataset Preparation
+% ------------------------------------------------
+
+\section{Dataset Preparation}
+
+\subsection{Dataset}
+
+The project will use the public Food-101 dataset. Only the 12 selected classes will
+be included in the experiments.
+
+Food-101 provides 750 training images and 250 test images for each class.
+
+The original test set will remain unchanged. The original training set will be divided
+into 600 training images and 150 validation images per class.
+
+The final dataset will contain:
+
+\begin{itemize}
+    \item \textbf{7,200} training images
+    \item \textbf{1,800} validation images
+    \item \textbf{3,000} test images
+    \item \textbf{12,000} images in total
+\end{itemize}
+
+The same split will be used in every experiment. This keeps the evaluated data constant,
+so differences between experimental conditions are not caused by different samples.
+
+\subsection{Image Preprocessing}
+
+All images will be prepared for the 224 by 224 input size used by ResNet-18.
+
+For experiments without augmentation, preprocessing will include:
+
+\begin{itemize}
+    \item resizing
+    \item center cropping to 224 by 224 pixels
+    \item conversion to tensors
+    \item normalization
+\end{itemize}
+
+\subsection{Data Augmentation}
+
+For experiments with augmentation, training images will use:
+
+\begin{itemize}
+    \item random resized cropping to 224 by 224 pixels
+    \item random horizontal flipping
+    \item small random color changes
+    \item conversion to tensors
+    \item normalization
+\end{itemize}
+
+These transformations create additional variation in viewpoint, framing, and color
+while preserving the food class. This allows the model to see more varied versions
+of the available training images.
+
+Validation and test images will use fixed preprocessing so that evaluation does not
+depend on random image transformations.
+
+% ------------------------------------------------
+% Experimental Plan
+% ------------------------------------------------
+
+\section{Experimental Plan}
+
+\subsection{Experimental Conditions}
+
+Four conditions will be compared:
+
+\begin{itemize}
+    \item ResNet-18 with random initialization and no augmentation
+    \item ResNet-18 with ImageNet pretraining and no augmentation
+    \item ResNet-18 with random initialization and augmentation
+    \item ResNet-18 with ImageNet pretraining and augmentation
+\end{itemize}
+
+The first condition will serve as the baseline.
+
+Comparing the first and second conditions will measure the effect of ImageNet
+pretraining.
+
+Comparing the first and third conditions will measure the effect of data augmentation.
+
+The fourth condition will show how pretraining and augmentation perform when used
+together.
+
+\subsection{Training Strategy}
+
+For pretrained models, the complete ResNet-18 network will be fine tuned.
+
+This allows both the final classifier and the feature extraction layers to adapt from
+general ImageNet features to features that are useful for food recognition.
+
+The planned training settings are:
+
+\begin{itemize}
+    \item AdamW optimizer
+    \item initial learning rate of $3 \times 10^{-4}$
+    \item batch size of 32
+    \item maximum of 30 epochs
+    \item learning rate scheduling during training
+    \item model selection based on validation accuracy
+\end{itemize}
+
+AdamW provides weight decay during optimization and can be used consistently for both
+randomly initialized and pretrained models.
+
+A batch size of 32 provides a practical balance between memory use and the number of
+samples used for each gradient update.
+
+The same training settings will be used across the four conditions so that the main
+difference between experiments remains the use of pretraining and augmentation.
+
+\subsection{Repeated Experiments}
+
+Each condition will be trained three times with different random seeds.
+
+Repeated runs reduce the influence of random initialization, training sample order,
+and random augmentation on the final comparison.
+
+The final results will therefore be reported using the \textbf{mean} and
+\textbf{standard deviation} across the three runs.
+
+\subsection{Evaluation Metrics}
+
+The main evaluation metrics will be:
+
+\begin{itemize}
+    \item \textbf{Accuracy}. The selected classes contain the same number of images,
+    so accuracy provides a direct measure of overall classification performance.
+
+    \item \textbf{Macro F1 score}. The F1 score will be calculated separately for
+    every class and then averaged. This helps identify whether strong overall
+    performance hides weaker results for individual classes.
+\end{itemize}
+
+Additional analysis will include:
+
+\begin{itemize}
+    \item precision for each class
+    \item recall for each class
+    \item confusion matrix
+    \item analysis of the most common confusion pairs
+    \item manual inspection of representative classification errors
+\end{itemize}
+
+\subsection{Confusion and Failure Analysis}
+
+The confusion matrix will be used to identify which classes are most frequently
+confused.
+
+This analysis is especially important for the selected groups of visually similar
+foods, such as cakes, noodle dishes, pasta dishes, and rice dishes.
+
+Around six representative errors will be inspected manually.
+
+Possible causes will include:
+
+\begin{itemize}
+    \item similar ingredients
+    \item similar shape or texture
+    \item similar presentation
+    \item unusual viewing angles
+    \item background objects
+    \item partial visibility of the food
+    \item images that are visually ambiguous even for a human observer
+\end{itemize}
+
+The test set will be used only after training and model selection are complete.
+Validation data will be used for checkpoint selection and training decisions.
+The test set will provide the final evaluation.
+
+% ------------------------------------------------
+% Implementation Plan
+% ------------------------------------------------
+
+\section{Implementation Plan}
+
+\subsection{Machine Learning Stack}
+
+The main machine learning stack will consist of:
+
+\begin{itemize}
+    \item Python
+    \item PyTorch
+    \item torchvision
+    \item scikit-learn
+    \item pandas
+    \item Matplotlib
+\end{itemize}
+
+PyTorch will be used for model training and inference.
+
+Torchvision provides the Food-101 dataset interface, the ResNet-18 implementation,
+ImageNet pretrained weights, and the image transformations required for preprocessing
+and augmentation.
+
+Scikit-learn will be used for classification metrics and confusion matrix calculation.
+
+Pandas will be used to organize and compare experimental results.
+
+Matplotlib will be used to create result visualizations.
+
+\subsection{Model Development}
+
+The implementation will include the following steps:
+
+\begin{itemize}
+    \item prepare the selected Food-101 classes
+    \item create the fixed training and validation split
+    \item implement preprocessing and augmentation
+    \item configure ResNet-18 for 12 output classes
+    \item train all four experimental conditions with three random seeds
+    \item save model checkpoints and training results
+    \item evaluate the trained models on the test set
+    \item calculate the main metrics and metrics for each class
+    \item generate the confusion matrix
+    \item collect misclassified samples
+    \item aggregate the results from repeated runs
+    \item select the final model based on the experimental results
+\end{itemize}
+
+Training and evaluation will be implemented as Python programs. This format is suitable
+for repeated machine learning experiments because the same training and evaluation
+procedure can be executed with fixed configurations and random seeds.
+
+\subsection{Prediction Backend}
+
+The prediction backend will use \textbf{FastAPI}.
+
+FastAPI allows the trained PyTorch model and the image preprocessing pipeline to be
+used directly inside the Python backend while providing an HTTP interface for the
+frontend.
+
+The backend will:
+
+\begin{itemize}
+    \item load the final trained model when the application starts
+    \item receive an image
+    \item validate the input image
+    \item apply the same preprocessing used during evaluation
+    \item run model inference
+    \item return the predicted class and confidence score
+\end{itemize}
+
+\subsection{Frontend}
+
+The frontend will be implemented with \textbf{React}.
+
+It will provide:
+
+\begin{itemize}
+    \item image upload
+    \item image preview
+    \item communication with the backend
+    \item predicted food class
+    \item prediction confidence
+    \item loading states
+    \item error handling
+\end{itemize}
+
+\subsection{Infrastructure}
+
+The project infrastructure will use:
+
+\begin{itemize}
+    \item GitHub
+    \item Docker
+    \item GitHub Actions
+\end{itemize}
+
+Docker will provide a consistent environment for the application and its dependencies.
+
+GitHub Actions will automatically check that the project can be installed, tested,
+and built correctly after changes to the repository.
+
+The experiment setup will also preserve the configurations and random seeds required
+to reproduce the reported training and evaluation results.
+
+% ------------------------------------------------
+% Team Responsibilities
+% ------------------------------------------------
+
+\section{Team Responsibilities}
+
+\subsection{Denis Geraskin}
+
+\textbf{Email:} d.geraskin@innopolis.university
+
+\textbf{Area: AI Engineering and Backend}
+
+Responsibilities:
+
+\begin{itemize}
+    \item implementation and configuration of ResNet-18
+    \item implementation of random and ImageNet pretrained initialization
+    \item training and fine tuning of the model
+    \item execution of the main experimental conditions
+    \item model checkpoint handling
+    \item implementation of model inference
+    \item model related backend logic
+\end{itemize}
+
+\subsection{Denis Beliaev}
+
+\textbf{Email:} d.beliaev@innopolis.university
+
+\textbf{Area: Data Science, Data Preparation and Backend}
+
+Responsibilities:
+
+\begin{itemize}
+    \item preparation of the Food-101 subset
+    \item creation of the training, validation, and test split
+    \item implementation of preprocessing and augmentation
+    \item implementation of quantitative evaluation
+    \item calculation of Accuracy, Macro F1, precision, and recall
+    \item generation and analysis of the confusion matrix
+    \item aggregation of results from repeated runs
+    \item identification of important confusion patterns
+    \item backend image preprocessing and validation
+\end{itemize}
+
+\subsection{Aiaz Nadirov}
+
+\textbf{Email:} a.nadirov@innopolis.university
+
+\textbf{Area: Infrastructure and Deployment}
+
+Responsibilities:
+
+\begin{itemize}
+    \item GitHub repository organization
+    \item dependency and environment management
+    \item Docker configuration
+    \item GitHub Actions configuration
+    \item automated testing
+    \item deployment of the final application
+    \item reproducible execution of experiments
+    \item preparation of setup, training, evaluation, and launch instructions
+\end{itemize}
+
+\subsection{Marat Yunusov}
+
+\textbf{Email:} mar.yunusov@innopolis.university
+
+\textbf{Area: Frontend and Qualitative Analysis}
+
+Responsibilities:
+
+\begin{itemize}
+    \item implementation of the React frontend
+    \item communication between the frontend and backend
+    \item image upload and prediction display
+    \item interface states and error handling
+    \item integration testing of the complete application
+    \item preparation of result visualizations
+    \item manual inspection of classification errors
+    \item grouping representative failures by their likely visual cause
+    \item preparation of representative prediction examples for the final demonstration
+\end{itemize}
+
+\end{document}
