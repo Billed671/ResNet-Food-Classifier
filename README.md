@@ -77,9 +77,12 @@ predictions. The report step writes to `reports/`:
 - `per_class_metrics.csv`: precision, recall and F1 per class and condition
 - `confusion_pairs.csv`: most frequent confusions per condition
 - `confusion_matrix.png`, `misclassified_examples.png`: for the final model
+  
+### This github repo does not include checkpoint files, as they exceed the 25mb size limit.
 
 The final model is the run with the highest validation accuracy; it is copied to
 `models/resnet18_food12.pt`. The test set is used only for reporting.
+
 
 ## Application
 
